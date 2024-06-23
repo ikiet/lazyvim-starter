@@ -6,11 +6,18 @@ local keymap = vim.keymap.set
 -- Silent keymap option
 local opts = { silent = true }
 
--- Better window navigation
-keymap("n", "<M-h>", "<C-w>h", opts)
-keymap("n", "<M-j>", "<C-w>j", opts)
-keymap("n", "<M-k>", "<C-w>k", opts)
-keymap("n", "<M-l>", "<C-w>l", opts)
+keymap("n", "<C-h>", function()
+  require("kitty-navigator").navigateLeft()
+end, opts)
+keymap("n", "<C-j>", function()
+  require("kitty-navigator").navigateDown()
+end, opts)
+keymap("n", "<C-k>", function()
+  require("kitty-navigator").navigateUp()
+end, opts)
+keymap("n", "<C-l>", function()
+  require("kitty-navigator").navigateRight()
+end, opts)
 
 keymap("v", "p", '"_dP', opts)
 
