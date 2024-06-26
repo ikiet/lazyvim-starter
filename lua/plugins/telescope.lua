@@ -16,9 +16,16 @@ return {
       -- add a keymap to browse plugin files
       -- stylua: ignore
       {
-        "<leader>fp",
+        "<leader>ff",
         function() require("telescope.builtin").find_files() end,
         desc = "Find File",
+      },
+      {
+        "<leader>fF",
+        function()
+          require("telescope.builtin").find_files({ no_ignore = true })
+        end,
+        desc = "Find File (No Ignore)",
       },
     },
     -- change some options
@@ -26,6 +33,9 @@ return {
       pickers = {
         find_files = {
           find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+        },
+        oldfiles = {
+          cwd_only = true,
         },
       },
       defaults = {
