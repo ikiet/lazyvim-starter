@@ -59,8 +59,8 @@ return {
       opts.defaults = {
         mappings = {
           i = {
-            ["<M-n>"] = require("telescope.actions").cycle_history_next,
-            ["<M-p>"] = require("telescope.actions").cycle_history_prev,
+            ["<C-j>"] = actions.cycle_history_next,
+            ["<C-k>"] = actions.cycle_history_prev,
           },
         },
         vimgrep_arguments = vimgrep_arguments,
