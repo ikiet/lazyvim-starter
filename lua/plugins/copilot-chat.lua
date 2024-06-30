@@ -3,8 +3,8 @@ return {
     "CopilotC-Nvim/CopilotChat.nvim",
     opts = {
       window = {
-        width = 0.6,
-        height = 0.6,
+        width = 0.7,
+        height = 0.7,
         layout = "float",
         relative = "editor", -- 'editor', 'win', 'cursor', 'mouse'
         border = "single", -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
