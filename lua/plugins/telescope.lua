@@ -86,20 +86,15 @@ return {
         file_browser = {
           theme = "dropdown",
           -- disables netrw and use telescope-file-browser in its place
-          hijack_netrw = false,
+          hijack_netrw = true,
           mappings = {
             -- your custom insert mode mappings
             ["n"] = {
               -- your custom normal mode mappings
-              ["a"] = fb_actions.create,
               ["h"] = fb_actions.goto_parent_dir,
-              ["c"] = fb_actions.copy,
-              ["d"] = fb_actions.remove,
-              ["r"] = fb_actions.rename,
+              ["l"] = actions.select_default,
               ["m"] = fb_actions.move,
               ["o"] = fb_actions.open,
-              ["/"] = fb_actions.goto_cwd,
-              ["~"] = fb_actions.goto_home_dir,
             },
           },
         },
