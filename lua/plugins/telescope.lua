@@ -24,12 +24,12 @@ return {
         desc = "Find File (No Ignore)",
       },
       {
-        "<leader>fp",
+        "<leader>e",
         function()
           require("telescope").extensions.file_browser.file_browser({
             path = vim.fn.expand("%:p:h"),
             select_buffer = true,
-            previewer = false,
+            previewer = true,
             respect_gitignore = false,
             hidden = true,
             grouped = true,
@@ -59,8 +59,10 @@ return {
       opts.defaults = {
         mappings = {
           i = {
-            ["<C-j>"] = actions.cycle_history_next,
-            ["<C-k>"] = actions.cycle_history_prev,
+            ["<C-h>"] = actions.cycle_history_next,
+            ["<C-l>"] = actions.cycle_history_prev,
+            ["<C-s>"] = actions.cycle_previewers_next,
+            ["<C-a>"] = actions.cycle_previewers_prev,
           },
         },
         vimgrep_arguments = vimgrep_arguments,
@@ -84,7 +86,7 @@ return {
       }
       opts.extensions = {
         file_browser = {
-          theme = "dropdown",
+          hide_parent_dir = true,
           -- disables netrw and use telescope-file-browser in its place
           hijack_netrw = true,
           mappings = {
@@ -92,9 +94,22 @@ return {
             ["n"] = {
               -- your custom normal mode mappings
               ["h"] = fb_actions.goto_parent_dir,
+              ["a"] = fb_actions.create,
+              ["c"] = fb_actions.copy,
               ["l"] = actions.select_default,
               ["m"] = fb_actions.move,
               ["o"] = fb_actions.open,
+              ["y"] = function()
+                local entry = require("telescope.actions.state").get_selected_entry()
+                local cb_opts = vim.opt.clipboard:get()
+                if vim.tbl_contains(cb_opts, "unnamed") then
+                  vim.fn.setreg("*", entry.path)
+                end
+                if vim.tbl_contains(cb_opts, "unnamedplus") then
+                  vim.fn.setreg("+", entry.path)
+                end
+                vim.fn.setreg("", entry.path)
+              end,
             },
           },
         },

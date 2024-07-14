@@ -6,6 +6,11 @@ local keymap = vim.keymap.set
 -- Silent keymap option
 local opts = { silent = true }
 
+keymap("i", "<C-f>", "<Right>", opts)
+keymap("i", "<C-b>", "<Left>", opts)
+keymap("i", "<C-e>", "<End>", opts)
+keymap("i", "<C-a>", "<Home>", opts)
+
 keymap("n", "<C-h>", function()
   require("kitty-navigator").navigateLeft()
 end, opts)
