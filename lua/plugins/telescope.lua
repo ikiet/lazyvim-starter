@@ -59,8 +59,9 @@ return {
       opts.defaults = {
         mappings = {
           i = {
-            ["<C-h>"] = actions.cycle_history_next,
-            ["<C-l>"] = actions.cycle_history_prev,
+            ["<C-j>"] = actions.cycle_history_next,
+            ["<C-k>"] = actions.cycle_history_prev,
+            ["<C-l>"] = actions.select_default,
             ["<C-s>"] = actions.cycle_previewers_next,
             ["<C-a>"] = actions.cycle_previewers_prev,
           },
