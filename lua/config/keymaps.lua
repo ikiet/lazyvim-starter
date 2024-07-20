@@ -29,3 +29,5 @@ keymap("v", "p", '"_dP', opts)
 keymap("n", "<CR>", "ggvG=", opts)
 
 keymap("v", "<CR>", "=", opts)
+
+keymap("n", "cp", ":cd %:p:h<CR>", opts)
