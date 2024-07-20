@@ -1,6 +1,7 @@
 return {
   {
     "nvim-telescope/telescope.nvim",
+    lazy = false,
     dependencies = {
       {
         "nvim-telescope/telescope-fzf-native.nvim",
@@ -30,10 +31,6 @@ return {
             path = vim.fn.expand("%:p:h"),
             select_buffer = true,
             previewer = true,
-            respect_gitignore = false,
-            hidden = true,
-            grouped = true,
-            initial_mode = "normal",
           })
         end,
         desc = "File Browser",
@@ -47,7 +44,17 @@ return {
       local configs = require("telescope.config")
       -- Clone the default Telescope configuration
       local vimgrep_arguments = { unpack(configs.values.vimgrep_arguments) }
-
+      local copyPathToClipboard = function()
+        local entry = require("telescope.actions.state").get_selected_entry()
+        local cb_opts = vim.opt.clipboard:get()
+        if vim.tbl_contains(cb_opts, "unnamed") then
+          vim.fn.setreg("*", entry.path)
+        end
+        if vim.tbl_contains(cb_opts, "unnamedplus") then
+          vim.fn.setreg("+", entry.path)
+        end
+        vim.fn.setreg("", entry.path)
+      end
       -- I want to search in hidden/dot files.
       table.insert(vimgrep_arguments, "--hidden")
       -- I don't want to search in the `.git` directory.
@@ -91,26 +98,17 @@ return {
           -- disables netrw and use telescope-file-browser in its place
           hijack_netrw = true,
           mappings = {
-            -- your custom insert mode mappings
-            ["n"] = {
+            ["i"] = {
               -- your custom normal mode mappings
+              ["<C-h>"] = fb_actions.goto_parent_dir,
+              ["<C-g>"] = fb_actions.toggle_hidden,
+              ["<C-y>"] = copyPathToClipboard,
+            },
+            ["n"] = {
               ["h"] = fb_actions.goto_parent_dir,
-              ["a"] = fb_actions.create,
-              ["c"] = fb_actions.copy,
+              ["g"] = fb_actions.toggle_hidden,
               ["l"] = actions.select_default,
-              ["m"] = fb_actions.move,
-              ["o"] = fb_actions.open,
-              ["y"] = function()
-                local entry = require("telescope.actions.state").get_selected_entry()
-                local cb_opts = vim.opt.clipboard:get()
-                if vim.tbl_contains(cb_opts, "unnamed") then
-                  vim.fn.setreg("*", entry.path)
-                end
-                if vim.tbl_contains(cb_opts, "unnamedplus") then
-                  vim.fn.setreg("+", entry.path)
-                end
-                vim.fn.setreg("", entry.path)
-              end,
+              ["Y"] = copyPathToClipboard,
             },
           },
         },
