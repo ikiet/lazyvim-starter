@@ -30,7 +30,6 @@ return {
             "filename",
             separator = "",
             path = 1,
-            padding = 0,
           },
         },
       }
