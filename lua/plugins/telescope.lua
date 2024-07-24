@@ -1,14 +1,6 @@
 return {
   {
     "nvim-telescope/telescope.nvim",
-    lazy = false,
-    dependencies = {
-      {
-        "nvim-telescope/telescope-fzf-native.nvim",
-        build = "make",
-      },
-      "nvim-telescope/telescope-file-browser.nvim",
-    },
     keys = {
       {
         "<leader>ff",
@@ -24,37 +16,14 @@ return {
         end,
         desc = "Find File (No Ignore)",
       },
-      {
-        "<leader>e",
-        function()
-          require("telescope").extensions.file_browser.file_browser({
-            path = vim.fn.expand("%:p:h"),
-            select_buffer = true,
-            previewer = true,
-          })
-        end,
-        desc = "File Browser",
-      },
     },
     config = function(_, opts)
       local telescope = require("telescope")
       local actions = require("telescope.actions")
-      local fb_actions = require("telescope").extensions.file_browser.actions
 
       local configs = require("telescope.config")
       -- Clone the default Telescope configuration
       local vimgrep_arguments = { unpack(configs.values.vimgrep_arguments) }
-      local copyPathToClipboard = function()
-        local entry = require("telescope.actions.state").get_selected_entry()
-        local cb_opts = vim.opt.clipboard:get()
-        if vim.tbl_contains(cb_opts, "unnamed") then
-          vim.fn.setreg("*", entry.path)
-        end
-        if vim.tbl_contains(cb_opts, "unnamedplus") then
-          vim.fn.setreg("+", entry.path)
-        end
-        vim.fn.setreg("", entry.path)
-      end
       -- I want to search in hidden/dot files.
       table.insert(vimgrep_arguments, "--hidden")
       -- I don't want to search in the `.git` directory.
@@ -68,9 +37,6 @@ return {
           i = {
             ["<C-j>"] = actions.cycle_history_next,
             ["<C-k>"] = actions.cycle_history_prev,
-            ["<C-l>"] = actions.select_default,
-            ["<C-s>"] = actions.cycle_previewers_next,
-            ["<C-a>"] = actions.cycle_previewers_prev,
           },
         },
         vimgrep_arguments = vimgrep_arguments,
@@ -92,30 +58,7 @@ return {
           cwd_only = true,
         },
       }
-      opts.extensions = {
-        file_browser = {
-          hide_parent_dir = true,
-          -- disables netrw and use telescope-file-browser in its place
-          hijack_netrw = true,
-          mappings = {
-            ["i"] = {
-              -- your custom normal mode mappings
-              ["<C-h>"] = fb_actions.goto_parent_dir,
-              ["<C-g>"] = fb_actions.toggle_hidden,
-              ["<C-y>"] = copyPathToClipboard,
-            },
-            ["n"] = {
-              ["h"] = fb_actions.goto_parent_dir,
-              ["g"] = fb_actions.toggle_hidden,
-              ["l"] = actions.select_default,
-              ["Y"] = copyPathToClipboard,
-            },
-          },
-        },
-      }
       telescope.setup(opts)
-      require("telescope").load_extension("fzf")
-      require("telescope").load_extension("file_browser")
     end,
   },
 }
