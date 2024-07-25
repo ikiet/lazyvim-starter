@@ -4,3 +4,4 @@
 vim.opt.showtabline = 0
 vim.g.root_spec = { { ".git", "lua" }, "cwd" }
 vim.g.autoformat = false
+vim.g.lazyvim_php_lsp = "intelephense"
