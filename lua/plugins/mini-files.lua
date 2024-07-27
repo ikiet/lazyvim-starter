@@ -84,13 +84,28 @@ return {
         end
       end
 
+      local open_sys_app = function()
+        local cur_entry_path = MiniFiles.get_fs_entry().path
+        require("lazy.util").open(cur_entry_path, { system = true })
+      end
+
+      local copy_absolute_path = function()
+        local cur_entry_path = MiniFiles.get_fs_entry().path
+        vim.fn.setreg("+", cur_entry_path, "c")
+      end
+
+      local copy_relative_path = function()
+        local cur_entry_path = MiniFiles.get_fs_entry().path
+        local relative_path = vim.fn.fnamemodify(cur_entry_path, ":.")
+        vim.fn.setreg("+", relative_path, "c")
+      end
+
       vim.api.nvim_create_autocmd("User", {
         pattern = "MiniFilesBufferCreate",
         callback = function(args)
           local buf_id = args.data.buf_id
 
-          vim.keymap.set(
-            "n",
+          vim.keymap.set( "n",
             opts.mappings and opts.mappings.toggle_hidden or "g.",
             toggle_dotfiles,
             { buffer = buf_id, desc = "Toggle hidden files" }
@@ -100,7 +115,28 @@ return {
             "n",
             opts.mappings and opts.mappings.change_cwd or "gc",
             files_set_cwd,
-            { buffer = args.data.buf_id, desc = "Set cwd" }
+            { buffer = buf_id, desc = "Set cwd" }
+          )
+
+          vim.keymap.set(
+            "n",
+            "go",
+            open_sys_app,
+            { buffer = buf_id, desc = "Open with System Application" }
+          )
+
+          vim.keymap.set(
+            "n",
+            "gY",
+            copy_absolute_path,
+            { buffer = buf_id, desc = "Copy Absolute Path To Clipboard" }
+          )
+
+          vim.keymap.set(
+            "n",
+            "gy",
+            copy_relative_path,
+            { buffer = buf_id, desc = "Copy Relative Path To Clipboard" }
           )
 
           map_split(buf_id, opts.mappings and opts.mappings.go_in_horizontal or "<C-X>", "horizontal", false)
