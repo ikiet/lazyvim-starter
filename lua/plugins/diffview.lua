@@ -10,5 +10,9 @@ vim.api.nvim_create_user_command("DiffviewToggle", function(e)
 end, { nargs = "*" })
 
 return {
-  { "sindrets/diffview.nvim" },
+  { "sindrets/diffview.nvim",
+    opts = {
+      enhanced_diff_hl = true,
+    }
+  },
 }
