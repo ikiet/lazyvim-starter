@@ -1,10 +1,17 @@
 local actions = require("fzf-lua.actions")
+
 local toggle_root = function(_, ctx)
   local o = vim.deepcopy(ctx.__call_opts)
   o.root = o.root == false
   o.cwd = nil
   o.resume = false
   o.buf = ctx.__CTX.bufnr
+  LazyVim.pick.open(ctx.__INFO.cmd, o)
+end
+
+local clearQuery = function(_, ctx)
+  local o = vim.deepcopy(ctx.__call_opts)
+  o.query = ""
   LazyVim.pick.open(ctx.__INFO.cmd, o)
 end
 
@@ -33,6 +40,7 @@ return {
         formatter = "path.filename_first",
         actions = {
           ["ctrl-r"] = toggle_root,
+          ["alt-c"] = clearQuery,
         },
       },
       git = {
@@ -45,18 +53,13 @@ return {
         commits = {
           actions = {
             ["ctrl-r"] = toggle_root,
+            ["alt-c"] = clearQuery,
           },
         },
         bcommits = {
           actions = {
-            ["ctrl-r"] = function(_, ctx)
-              local o = vim.deepcopy(ctx.__call_opts)
-              o.root = o.root == false
-              o.cwd = nil
-              o.resume = false
-              o.buf = ctx.__CTX.bufnr
-              LazyVim.pick.open(ctx.__INFO.cmd, o)
-            end,
+            ["ctrl-r"] = toggle_root,
+            ["alt-c"] = clearQuery,
           },
         },
       },
