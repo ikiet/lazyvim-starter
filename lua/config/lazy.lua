@@ -42,6 +42,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.util.rest" },
     { import = "lazyvim.plugins.extras.editor.harpoon2" },
     { import = "lazyvim.plugins.extras.editor.refactoring" },
+    { import = "lazyvim.plugins.extras.editor.fzf" },
     { import = "plugins" },
   },
   defaults = {
