@@ -2,10 +2,19 @@ local actions = require("fzf-lua.actions")
 
 local toggle_root = function(_, ctx)
   local o = vim.deepcopy(ctx.__call_opts)
+  local winopts = vim.deepcopy(ctx.winopts)
+  local basename = winopts.title.gsub(winopts.title, "%(.-%)", "")
+  if o.root == true then
+    winopts.title = basename .. "(Cwd)"
+  else
+    winopts.title = basename .. "(Root)"
+  end
+
   o.root = o.root == false
   o.cwd = nil
   o.resume = false
   o.buf = ctx.__CTX.bufnr
+  o.winopts = winopts
   LazyVim.pick.open(ctx.__INFO.cmd, o)
 end
 
@@ -99,21 +108,69 @@ return {
       { "<leader>/", false },
 
       -- find
-      { "<leader>ff", LazyVim.pick("files", { root = true, resume = true }), desc = "Find Files (Root Dir)" },
-      { "<leader>fF", LazyVim.pick("files", { root = true, resume = false }), desc = "Find Files" },
-      { "<leader>fr", LazyVim.pick("oldfiles", { root = true, resume = true }), desc = "Recent (Resume)" },
-      { "<leader>fR", LazyVim.pick("oldfiles", { root = true, resume = false }), desc = "Recent" },
+      {
+        "<leader>ff",
+        LazyVim.pick("files", { root = true, resume = true, winopts = { title = "Files(Root)" } }),
+        desc = "Find Files (Root Dir)",
+      },
+      {
+        "<leader>fF",
+        LazyVim.pick("files", { root = true, resume = false, winopts = { title = "Files(Root)" } }),
+        desc = "Find Files",
+      },
+      {
+        "<leader>fr",
+        LazyVim.pick("oldfiles", { root = true, resume = true, winopts = { title = "OldFiles(Root)" } }),
+        desc = "Recent (Resume)",
+      },
+      {
+        "<leader>fR",
+        LazyVim.pick("oldfiles", { root = true, resume = false, winopts = { title = "OldFiles(Root)" } }),
+        desc = "Recent",
+      },
       -- git
-      { "<leader>gc", LazyVim.pick("git_commits", { root = true, resume = true }), desc = "Commits (Resume)" },
-      { "<leader>gC", LazyVim.pick("git_commits", { root = true, resume = false }), desc = "Commits" },
-      { "<leader>gt", LazyVim.pick("git_bcommits", { root = true, resume = true }), desc = "Buffer Commits (Resume)" },
-      { "<leader>gT", LazyVim.pick("git_bcommits", { root = true, resume = false }), desc = "Buffer Commits" },
-      { "<leader>gs", LazyVim.pick("git_status", { root = true, resume = true }), desc = "Status (Resume)" },
-      { "<leader>gS", LazyVim.pick("git_status", { root = true, resume = false }), desc = "Status" },
+      {
+        "<leader>gc",
+        LazyVim.pick("git_commits", { root = true, resume = true, winopts = { title = "Git Commits(Root)" } }),
+        desc = "Commits (Resume)",
+      },
+      {
+        "<leader>gC",
+        LazyVim.pick("git_commits", { root = true, resume = false, winopts = { title = "Git Commits(Root)" } }),
+        desc = "Commits",
+      },
+      {
+        "<leader>gt",
+        LazyVim.pick("git_bcommits", { root = true, resume = true, winopts = { title = "Buffer Commits(Root)" } }),
+        desc = "Buffer Commits (Resume)",
+      },
+      {
+        "<leader>gT",
+        LazyVim.pick("git_bcommits", { root = true, resume = false, winopts = { title = "Buffer Commits(Root)" } }),
+        desc = "Buffer Commits",
+      },
+      {
+        "<leader>gs",
+        LazyVim.pick("git_status", { root = true, resume = true, winopts = { title = "Git Status(Root)" } }),
+        desc = "Status (Resume)",
+      },
+      {
+        "<leader>gS",
+        LazyVim.pick("git_status", { root = true, resume = false, winopts = { title = "Git Status(Root)" } }),
+        desc = "Status",
+      },
       -- search
       { "<leader>sb", "<cmd>FzfLua grep_curbuf<cr>", desc = "Grep Buffer" },
-      { "<leader>sg", LazyVim.pick("live_grep", { root = true, resume = true }), desc = "Grep (Resume)" },
-      { "<leader>sG", LazyVim.pick("live_grep", { root = true, resume = false }), desc = "Grep" },
+      {
+        "<leader>sg",
+        LazyVim.pick("live_grep", { root = true, resume = true, winopts = { title = "Grep(Root)" } }),
+        desc = "Grep (Resume)",
+      },
+      {
+        "<leader>sG",
+        LazyVim.pick("live_grep", { root = true, resume = false, winopts = { title = "Grep(Root)" } }),
+        desc = "Grep",
+      },
     },
   },
 }
