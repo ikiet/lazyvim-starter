@@ -9,8 +9,15 @@ local toggle_root = function(_, ctx)
   LazyVim.pick.open(ctx.__INFO.cmd, o)
 end
 
-local clearQuery = function(_, ctx)
+local clear_query = function(_, ctx)
   local o = vim.deepcopy(ctx.__call_opts)
+  o.query = ""
+  LazyVim.pick.open(ctx.__INFO.cmd, o)
+end
+
+local grep_clear_search_and_query = function(_, ctx)
+  local o = vim.deepcopy(ctx.__call_opts)
+  o.search = ""
   o.query = ""
   LazyVim.pick.open(ctx.__INFO.cmd, o)
 end
@@ -40,7 +47,20 @@ return {
         formatter = "path.filename_first",
         actions = {
           ["ctrl-r"] = toggle_root,
-          ["alt-c"] = clearQuery,
+          ["alt-c"] = clear_query,
+        },
+      },
+      oldfiles = {
+        actions = {
+          ["ctrl-r"] = toggle_root,
+          ["alt-c"] = clear_query,
+        },
+      },
+      grep = {
+        formatter = "path.filename_first",
+        actions = {
+          ["ctrl-r"] = toggle_root,
+          ["alt-c"] = grep_clear_search_and_query,
         },
       },
       git = {
@@ -48,18 +68,19 @@ return {
           actions = {
             ["ctrl-u"] = { fn = actions.git_unstage, reload = true },
             ["ctrl-s"] = { fn = actions.git_stage, reload = true },
+            ["ctrl-r"] = toggle_root,
           },
         },
         commits = {
           actions = {
             ["ctrl-r"] = toggle_root,
-            ["alt-c"] = clearQuery,
+            ["alt-c"] = clear_query,
           },
         },
         bcommits = {
           actions = {
             ["ctrl-r"] = toggle_root,
-            ["alt-c"] = clearQuery,
+            ["alt-c"] = clear_query,
           },
         },
       },
@@ -80,19 +101,19 @@ return {
       -- find
       { "<leader>ff", LazyVim.pick("files", { root = true, resume = true }), desc = "Find Files (Root Dir)" },
       { "<leader>fF", LazyVim.pick("files", { root = true, resume = false }), desc = "Find Files" },
-      { "<leader>fr", LazyVim.pick("oldfiles", { resume = true }), desc = "Recent (Resume)" },
-      { "<leader>fR", LazyVim.pick("oldfiles", { resume = false }), desc = "Recent" },
+      { "<leader>fr", LazyVim.pick("oldfiles", { root = true, resume = true }), desc = "Recent (Resume)" },
+      { "<leader>fR", LazyVim.pick("oldfiles", { root = true, resume = false }), desc = "Recent" },
       -- git
-      { "<leader>gc", LazyVim.pick("git_commits", { resume = true }), desc = "Commits (Resume)" },
-      { "<leader>gC", LazyVim.pick("git_commits", { resume = false }), desc = "Commits" },
-      { "<leader>gt", LazyVim.pick("git_bcommits", { resume = true }), desc = "Buffer Commits (Resume)" },
-      { "<leader>gT", LazyVim.pick("git_bcommits", { resume = false }), desc = "Buffer Commits" },
-      { "<leader>gs", LazyVim.pick("git_status", { resume = true }), desc = "Status (Resume)" },
-      { "<leader>gS", LazyVim.pick("git_status", { resume = false }), desc = "Status" },
+      { "<leader>gc", LazyVim.pick("git_commits", { root = true, resume = true }), desc = "Commits (Resume)" },
+      { "<leader>gC", LazyVim.pick("git_commits", { root = true, resume = false }), desc = "Commits" },
+      { "<leader>gt", LazyVim.pick("git_bcommits", { root = true, resume = true }), desc = "Buffer Commits (Resume)" },
+      { "<leader>gT", LazyVim.pick("git_bcommits", { root = true, resume = false }), desc = "Buffer Commits" },
+      { "<leader>gs", LazyVim.pick("git_status", { root = true, resume = true }), desc = "Status (Resume)" },
+      { "<leader>gS", LazyVim.pick("git_status", { root = true, resume = false }), desc = "Status" },
       -- search
       { "<leader>sb", "<cmd>FzfLua grep_curbuf<cr>", desc = "Grep Buffer" },
-      { "<leader>sg", LazyVim.pick("live_grep_resume"), desc = "Grep (Resume)" },
-      { "<leader>sG", LazyVim.pick("live_grep"), desc = "Grep" },
+      { "<leader>sg", LazyVim.pick("live_grep", { root = true, resume = true }), desc = "Grep (Resume)" },
+      { "<leader>sG", LazyVim.pick("live_grep", { root = true, resume = false }), desc = "Grep" },
     },
   },
 }
