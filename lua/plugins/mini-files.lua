@@ -3,9 +3,9 @@ return {
     "echasnovski/mini.files",
     opts = {
       windows = {
-        preview = false,
+        preview = true,
         width_focus = 30,
-        width_preview = 30,
+        width_preview = 50,
       },
       options = {
         use_as_default_explorer = false,
@@ -16,7 +16,7 @@ return {
         go_out      = 'H',
         go_out_plus = '<BS>',
         reset       = 'r',
-        synchronize = '<Space>',
+        synchronize = '<Tab>',
       },
     },
     keys = {

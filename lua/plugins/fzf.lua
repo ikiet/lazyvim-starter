@@ -53,7 +53,7 @@ return {
       },
 
       files = {
-        formatter = "path.filename_first",
+        formatter = {"path.filename_first", 2},
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = clear_query,
@@ -66,7 +66,7 @@ return {
         },
       },
       grep = {
-        formatter = "path.filename_first",
+        formatter = {"path.filename_first", 2},
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = grep_clear_search_and_query,
@@ -78,6 +78,7 @@ return {
             ["ctrl-u"] = { fn = actions.git_unstage, reload = true },
             ["ctrl-s"] = { fn = actions.git_stage, reload = true },
             ["ctrl-r"] = toggle_root,
+            ["alt-c"] = clear_query,
           },
         },
         commits = {
@@ -97,7 +98,7 @@ return {
         height = 0.9,
         width = 0.9,
         preview = {
-          horizontal = "right:75%", -- right|left:size
+          horizontal = "right:70%", -- right|left:size
         },
       },
     },
