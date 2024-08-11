@@ -13,10 +13,10 @@ return {
       mappings = {
         go_in_plus = "<CR>",
         go_in = "L",
-        go_out      = 'H',
-        go_out_plus = '<BS>',
-        reset       = 'r',
-        synchronize = '<Tab>',
+        go_out = "H",
+        go_out_plus = "<BS>",
+        reset = "r",
+        synchronize = "<Tab>",
       },
     },
     keys = {
@@ -105,7 +105,8 @@ return {
         callback = function(args)
           local buf_id = args.data.buf_id
 
-          vim.keymap.set( "n",
+          vim.keymap.set(
+            "n",
             opts.mappings and opts.mappings.toggle_hidden or "g.",
             toggle_dotfiles,
             { buffer = buf_id, desc = "Toggle hidden files" }
@@ -118,26 +119,11 @@ return {
             { buffer = buf_id, desc = "Set cwd" }
           )
 
-          vim.keymap.set(
-            "n",
-            "go",
-            open_sys_app,
-            { buffer = buf_id, desc = "Open with System Application" }
-          )
+          vim.keymap.set("n", "go", open_sys_app, { buffer = buf_id, desc = "Open with System Application" })
 
-          vim.keymap.set(
-            "n",
-            "gY",
-            copy_absolute_path,
-            { buffer = buf_id, desc = "Copy Absolute Path To Clipboard" }
-          )
+          vim.keymap.set("n", "gY", copy_absolute_path, { buffer = buf_id, desc = "Copy Absolute Path To Clipboard" })
 
-          vim.keymap.set(
-            "n",
-            "gy",
-            copy_relative_path,
-            { buffer = buf_id, desc = "Copy Relative Path To Clipboard" }
-          )
+          vim.keymap.set("n", "gy", copy_relative_path, { buffer = buf_id, desc = "Copy Relative Path To Clipboard" })
 
           map_split(buf_id, opts.mappings and opts.mappings.go_in_horizontal or "<C-X>", "horizontal", false)
           map_split(buf_id, opts.mappings and opts.mappings.go_in_vertical or "<C-V>", "vertical", false)
@@ -152,6 +138,6 @@ return {
           LazyVim.lsp.on_rename(event.data.from, event.data.to)
         end,
       })
-    end
+    end,
   },
 }
