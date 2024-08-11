@@ -26,6 +26,6 @@ end, opts)
 
 keymap("v", "p", '"_dP', opts)
 
-keymap("n", "<C-\\>", "<C-w>|<C-w>_", opts)
+keymap("n", "<C-w>m", "<C-w>|<C-w>_", opts)
 
 keymap("n", "cp", ":cd %:p:h<CR>", opts)
