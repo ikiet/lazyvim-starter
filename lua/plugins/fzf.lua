@@ -31,6 +31,23 @@ local grep_clear_search_and_query = function(_, ctx)
   LazyVim.pick.open(ctx.__INFO.cmd, o)
 end
 
+_G.fzf_dirs = function(opts)
+  local fzf_lua = require'fzf-lua'
+  opts = opts or {}
+  opts.prompt = "Directories> "
+  opts.fn_transform = function(x)
+    return fzf_lua.utils.ansi_codes.magenta(x)
+  end
+  opts.actions = {
+    ['default'] = function(selected)
+        vim.cmd("e " .. selected[1])
+    end
+  }
+  fzf_lua.fzf_exec("fd --type d", opts)
+end
+
+vim.keymap.set('n', '<leader>fd', _G.fzf_dirs)
+
 return {
   {
     "ibhagwan/fzf-lua",

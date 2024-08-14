@@ -1,6 +1,7 @@
 return {
   {
     "echasnovski/mini.files",
+    lazy = false,
     opts = {
       windows = {
         preview = true,
@@ -8,7 +9,7 @@ return {
         width_preview = 50,
       },
       options = {
-        use_as_default_explorer = false,
+        use_as_default_explorer = true,
       },
       mappings = {
         go_in_plus = "<CR>",
