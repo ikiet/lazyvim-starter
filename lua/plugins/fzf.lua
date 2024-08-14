@@ -53,20 +53,21 @@ return {
       },
 
       files = {
-        formatter = {"path.filename_first", 2},
+        formatter = { "path.filename_first", 2 },
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = clear_query,
         },
       },
       oldfiles = {
+        include_current_session = true,
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = clear_query,
         },
       },
       grep = {
-        formatter = {"path.filename_first", 2},
+        formatter = { "path.filename_first", 2 },
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = grep_clear_search_and_query,
