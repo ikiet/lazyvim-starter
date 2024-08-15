@@ -1,4 +1,26 @@
 local actions = require("fzf-lua.actions")
+local path = require("fzf-lua.path")
+
+local copy_path = function(selected, opts, absoluteMode)
+  -- Lua 5.1 goto compatiblity hack (function wrap)
+  local entry = path.entry_to_file(selected[1], opts, opts._uri)
+  -- "<none>" could be set by `autocmds`
+  if entry.path == "<none>" then
+    return
+  end
+  local fullpath = entry.bufname or entry.uri and entry.uri:match("^%a+://(.*)") or entry.path
+  -- Something is not right, goto next entry
+  if not fullpath then
+    return
+  end
+  local cwd = opts.cwd or opts._cwd or uv.cwd()
+  if path.is_absolute(fullpath) and not absoluteMode then
+    fullpath = path.relative_to(fullpath, cwd)
+  elseif not path.is_absolute(fullpath) and absoluteMode then
+    fullpath = path.join({ cwd, fullpath })
+  end
+  vim.fn.setreg("+", fullpath, "c")
+end
 
 local toggle_root = function(_, ctx)
   local o = vim.deepcopy(ctx.__call_opts)
@@ -74,6 +96,12 @@ return {
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = clear_query,
+          ["alt-y"] = function(selected, opts)
+            copy_path(selected, opts, false)
+          end,
+          ["alt-Y"] = function(selected, opts)
+            copy_path(selected, opts, true)
+          end,
         },
       },
       oldfiles = {
