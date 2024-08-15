@@ -1,4 +1,5 @@
 local actions = require("fzf-lua.actions")
+local utils = require("fzf-lua.utils")
 local path = require("fzf-lua.path")
 
 local copy_path = function(selected, opts, absoluteMode)
@@ -20,6 +21,37 @@ local copy_path = function(selected, opts, absoluteMode)
     fullpath = path.join({ cwd, fullpath })
   end
   vim.fn.setreg("+", fullpath, "c")
+end
+
+local function copy_path_silently(absoluteMode)
+  return {
+    fn = function(selected, opts)
+      copy_path(selected, opts, absoluteMode)
+    end,
+    exec_silent = true,
+  }
+end
+
+local git_commit = function(selected, opts)
+  -- "reload" actions (fzf version >= 0.36) use field_index = "{q}"
+  -- so the prompt input will be found in `selected[1]`
+  -- previous fzf versions (or skim) restart the process instead
+  -- so the prompt input will be found in `opts.last_query`
+  local message = opts.last_query or selected[1]
+  if type(message) ~= "string" or #message == 0 then
+    utils.warn("Commit message cannot be empty, use prompt for input.")
+  else
+    if utils.input("Commit staged changes? [y/n]\n" .. message .."\n") == "y" then
+      local cmd_git_commit = path.git_cwd(opts.cmd_commit, opts)
+      table.insert(cmd_git_commit, message)
+      local output, rc = utils.io_systemlist(cmd_git_commit)
+      if rc ~= 0 then
+        utils.err(table.concat(output, "\n"))
+      else
+        utils.info(string.format("Commited: '%s'.", message))
+      end
+    end
+  end
 end
 
 local toggle_root = function(_, ctx)
@@ -96,12 +128,8 @@ return {
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = clear_query,
-          ["alt-y"] = function(selected, opts)
-            copy_path(selected, opts, false)
-          end,
-          ["alt-Y"] = function(selected, opts)
-            copy_path(selected, opts, true)
-          end,
+          ["alt-y"] = copy_path_silently(false),
+          ["alt-Y"] = copy_path_silently(true),
         },
       },
       oldfiles = {
@@ -109,12 +137,8 @@ return {
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = clear_query,
-          ["alt-y"] = function(selected, opts)
-            copy_path(selected, opts, false)
-          end,
-          ["alt-Y"] = function(selected, opts)
-            copy_path(selected, opts, true)
-          end,
+          ["alt-y"] = copy_path_silently(false),
+          ["alt-Y"] = copy_path_silently(true),
         },
       },
       buffers = {
@@ -125,28 +149,22 @@ return {
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = grep_clear_search_and_query,
-          ["alt-y"] = function(selected, opts)
-            copy_path(selected, opts, false)
-          end,
-          ["alt-Y"] = function(selected, opts)
-            copy_path(selected, opts, true)
-          end,
+          ["alt-y"] = copy_path_silently(false),
+          ["alt-Y"] = copy_path_silently(true),
         },
       },
       git = {
         status = {
           formatter = { "path.filename_first", 2 },
+          cmd_commit = { "git", "commit", "-m" },
           actions = {
             ["ctrl-u"] = { fn = actions.git_unstage, reload = true },
             ["ctrl-s"] = { fn = actions.git_stage, reload = true },
             ["ctrl-r"] = toggle_root,
             ["alt-c"] = clear_query,
-            ["alt-y"] = function(selected, opts)
-              copy_path(selected, opts, false)
-            end,
-            ["alt-Y"] = function(selected, opts)
-              copy_path(selected, opts, true)
-            end,
+            ["alt-y"] = copy_path_silently(false),
+            ["alt-Y"] = copy_path_silently(true),
+            ["alt-k"] = { fn = git_commit, field_index = "{q}", reload = true },
           },
         },
         commits = {
@@ -244,6 +262,16 @@ return {
         "<leader>dd",
         "<cmd>FzfLua dap_breakpoints<cr>",
         desc = "Breakpoints",
+      },
+      {
+        "<leader>gn",
+        "<cmd>FzfLua git_branches<cr>",
+        desc = "Git Branches",
+      },
+      {
+        "<leader>gm",
+        "<cmd>FzfLua git_stash<cr>",
+        desc = "Git Stashes",
       },
     },
   },
