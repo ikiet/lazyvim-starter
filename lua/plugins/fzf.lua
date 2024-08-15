@@ -109,6 +109,12 @@ return {
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = clear_query,
+          ["alt-y"] = function(selected, opts)
+            copy_path(selected, opts, false)
+          end,
+          ["alt-Y"] = function(selected, opts)
+            copy_path(selected, opts, true)
+          end,
         },
       },
       buffers = {
@@ -119,6 +125,12 @@ return {
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-c"] = grep_clear_search_and_query,
+          ["alt-y"] = function(selected, opts)
+            copy_path(selected, opts, false)
+          end,
+          ["alt-Y"] = function(selected, opts)
+            copy_path(selected, opts, true)
+          end,
         },
       },
       git = {
@@ -129,6 +141,12 @@ return {
             ["ctrl-s"] = { fn = actions.git_stage, reload = true },
             ["ctrl-r"] = toggle_root,
             ["alt-c"] = clear_query,
+            ["alt-y"] = function(selected, opts)
+              copy_path(selected, opts, false)
+            end,
+            ["alt-Y"] = function(selected, opts)
+              copy_path(selected, opts, true)
+            end,
           },
         },
         commits = {
