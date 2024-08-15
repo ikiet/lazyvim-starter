@@ -240,6 +240,11 @@ return {
         LazyVim.pick("live_grep", { root = true, resume = false, winopts = { title = "Grep(Root)" } }),
         desc = "Grep",
       },
+      {
+        "<leader>dd",
+        "<cmd>FzfLua dap_breakpoints<cr>",
+        desc = "Breakpoints",
+      },
     },
   },
 }
