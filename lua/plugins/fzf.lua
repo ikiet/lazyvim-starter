@@ -41,7 +41,7 @@ local git_commit = function(selected, opts)
   if type(message) ~= "string" or #message == 0 then
     utils.warn("Commit message cannot be empty, use prompt for input.")
   else
-    if utils.input("Commit staged changes? [y/n]\n" .. message .."\n") == "y" then
+    if utils.input("Commit staged changes? [y/n]\n" .. message .. "\n") == "y" then
       local cmd_git_commit = path.git_cwd(opts.cmd_commit, opts)
       table.insert(cmd_git_commit, message)
       local output, rc = utils.io_systemlist(cmd_git_commit)
@@ -69,19 +69,6 @@ local toggle_root = function(_, ctx)
   o.resume = false
   o.buf = ctx.__CTX.bufnr
   o.winopts = winopts
-  LazyVim.pick.open(ctx.__INFO.cmd, o)
-end
-
-local clear_query = function(_, ctx)
-  local o = vim.deepcopy(ctx.__call_opts)
-  o.query = ""
-  LazyVim.pick.open(ctx.__INFO.cmd, o)
-end
-
-local grep_clear_search_and_query = function(_, ctx)
-  local o = vim.deepcopy(ctx.__call_opts)
-  o.search = ""
-  o.query = ""
   LazyVim.pick.open(ctx.__INFO.cmd, o)
 end
 
@@ -121,13 +108,13 @@ return {
           ["<M-j>"] = "preview-down",
           ["<M-k>"] = "preview-up",
         },
+        fzf = {},
       },
 
       files = {
         formatter = { "path.filename_first", 2 },
         actions = {
           ["ctrl-r"] = toggle_root,
-          ["alt-c"] = clear_query,
           ["alt-y"] = copy_path_silently(false),
           ["alt-Y"] = copy_path_silently(true),
         },
@@ -136,7 +123,6 @@ return {
         include_current_session = true,
         actions = {
           ["ctrl-r"] = toggle_root,
-          ["alt-c"] = clear_query,
           ["alt-y"] = copy_path_silently(false),
           ["alt-Y"] = copy_path_silently(true),
         },
@@ -148,7 +134,6 @@ return {
         formatter = { "path.filename_first", 2 },
         actions = {
           ["ctrl-r"] = toggle_root,
-          ["alt-c"] = grep_clear_search_and_query,
           ["alt-y"] = copy_path_silently(false),
           ["alt-Y"] = copy_path_silently(true),
         },
@@ -158,10 +143,10 @@ return {
           formatter = { "path.filename_first", 2 },
           cmd_commit = { "git", "commit", "-m" },
           actions = {
-            ["ctrl-u"] = { fn = actions.git_unstage, reload = true },
-            ["ctrl-s"] = { fn = actions.git_stage, reload = true },
+            ["right"] = false,
+            ["left"] = false,
+            ["ctrl-s"] = { fn = actions.git_stage_unstage, reload = true },
             ["ctrl-r"] = toggle_root,
-            ["alt-c"] = clear_query,
             ["alt-y"] = copy_path_silently(false),
             ["alt-Y"] = copy_path_silently(true),
             ["alt-k"] = { fn = git_commit, field_index = "{q}", reload = true },
@@ -170,13 +155,11 @@ return {
         commits = {
           actions = {
             ["ctrl-r"] = toggle_root,
-            ["alt-c"] = clear_query,
           },
         },
         bcommits = {
           actions = {
             ["ctrl-r"] = toggle_root,
-            ["alt-c"] = clear_query,
           },
         },
       },
