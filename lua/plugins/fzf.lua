@@ -43,12 +43,14 @@ local git_commit = function(selected, opts)
   else
     if utils.input("Commit staged changes? [y/n]\n" .. message .. "\n") == "y" then
       local cmd_git_commit = path.git_cwd(opts.cmd_commit, opts)
-      table.insert(cmd_git_commit, message)
-      local output, rc = utils.io_systemlist(cmd_git_commit)
-      if rc ~= 0 then
-        utils.err(table.concat(output, "\n"))
-      else
-        utils.info(string.format("Commited: '%s'.", message))
+      if cmd_git_commit ~= nil then
+        table.insert(cmd_git_commit, message)
+        local output, rc = utils.io_systemlist(cmd_git_commit)
+        if rc ~= 0 then
+          utils.err(table.concat(output, "\n"))
+        else
+          utils.info(string.format("Commited: '%s'.", message))
+        end
       end
     end
   end
@@ -56,19 +58,11 @@ end
 
 local toggle_root = function(_, ctx)
   local o = vim.deepcopy(ctx.__call_opts)
-  local winopts = vim.deepcopy(ctx.winopts)
-  local basename = winopts.title.gsub(winopts.title, "%(.-%)", "")
-  if o.root == true then
-    winopts.title = basename .. "(Cwd)"
-  else
-    winopts.title = basename .. "(Root)"
-  end
 
   o.root = o.root == false
   o.cwd = nil
   o.resume = false
   o.buf = ctx.__CTX.bufnr
-  o.winopts = winopts
   LazyVim.pick.open(ctx.__INFO.cmd, o)
 end
 
@@ -89,30 +83,96 @@ end
 
 vim.keymap.set("n", "<leader>fd", _G.fzf_dirs)
 
+local default_winopts = {
+  height = 0.9,
+  width = 0.9,
+  preview = {
+    layout = "flex", -- horizontal|vertical|flex
+    vertical = "up:55%", -- up|down:size
+    horizontal = "right:60%", -- right|left:size
+    scrollbar = "border", -- `false` or string:'float|border'
+  },
+}
+
+local git_status_winopts = {
+  height = 0.90,
+  width = 1,
+  preview = {
+    layout = "vertical", -- horizontal|vertical|flex
+    vertical = "down:72%",
+  },
+}
+
+local grep_winopts = {
+  height = 0.85,
+  width = 0.9,
+  preview = {
+    layout = "vertical",
+    vertical = "down:60%",
+  },
+}
+
+local files_winopts = {
+  height = 0.85,
+  width = 0.70,
+  preview = {
+    hidden = "hidden",
+    layout = "vertical", -- horizontal|vertical|flex
+    vertical = "down:65%",
+  },
+}
+
+local clear_key = [[ctrl-i]]
+
 return {
   {
     "ibhagwan/fzf-lua",
     cmd = "FzfLua",
     opts = {
+      winopts = default_winopts,
+      fzf_opts = {
+        ["--no-scrollbar"] = false,
+      },
+      previewers = {
+        builtin = {
+          toggle_behavior = "extend",
+        },
+      },
       keymap = {
         -- Below are the default binds, setting any value in these tables will override
         -- the defaults, to inherit from the defaults change [1] from `false` to `true`
         builtin = {
+          false,
           ["<M-/>"] = "toggle-help",
-          -- Only valid with the 'builtin' previewer
           ["<M-w>"] = "toggle-preview-wrap",
           ["<M-p>"] = "toggle-preview",
-          -- Rotate preview clockwise/counter-clockwise
-          ["<M-S-j>"] = "preview-page-down",
-          ["<M-S-k>"] = "preview-page-up",
-          ["<M-j>"] = "preview-down",
-          ["<M-k>"] = "preview-up",
+          ["<M-S-d>"] = "preview-down",
+          ["<M-S-u>"] = "preview-up",
+          ["<M-d>"] = "preview-page-down",
+          ["<M-u>"] = "preview-page-up",
+          ["<C-d>"] = "half-page-down",
+          ["<C-u>"] = "half-page-up",
         },
-        fzf = {},
+        fzf = {
+          false,
+          [clear_key] = "unix-line-discard",
+          ["ctrl-d"] = "half-page-down",
+          ["ctrl-u"] = "half-page-up",
+          ["alt-g"] = "last",
+          ["alt-G"] = "first",
+          ["alt-p"] = "toggle-preview",
+          ["alt-d"] = "preview-page-down",
+          ["alt-u"] = "preview-page-up",
+          ["alt-D"] = "preview-down",
+          ["alt-U"] = "preview-up",
+        },
       },
 
       files = {
-        formatter = { "path.filename_first", 2 },
+        false,
+        cwd_prompt = true,
+        winopts = files_winopts,
+        formatter = { "path.dirname_first" },
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-y"] = copy_path_silently(false),
@@ -121,6 +181,8 @@ return {
       },
       oldfiles = {
         include_current_session = true,
+        winopts = files_winopts,
+        cwd_prompt = true,
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-y"] = copy_path_silently(false),
@@ -128,10 +190,14 @@ return {
         },
       },
       buffers = {
-        formatter = { "path.filename_first", 2 },
+        cwd_prompt = true,
+        winopts = files_winopts,
+        formatter = { "path.dirname_first" },
       },
       grep = {
-        formatter = { "path.filename_first", 2 },
+        cwd_prompt = true,
+        formatter = { "path.dirname_first" },
+        winopts = grep_winopts,
         actions = {
           ["ctrl-r"] = toggle_root,
           ["alt-y"] = copy_path_silently(false),
@@ -140,8 +206,10 @@ return {
       },
       git = {
         status = {
-          formatter = { "path.filename_first", 2 },
+          cwd_prompt = true,
+          formatter = { "path.dirname_first" },
           cmd_commit = { "git", "commit", "-m" },
+          winopts = git_status_winopts,
           actions = {
             ["right"] = false,
             ["left"] = false,
@@ -153,21 +221,31 @@ return {
           },
         },
         commits = {
+          cwd_prompt = true,
+          winopts = git_status_winopts,
           actions = {
             ["ctrl-r"] = toggle_root,
           },
         },
         bcommits = {
+          cwd_prompt = true,
+          winopts = git_status_winopts,
           actions = {
             ["ctrl-r"] = toggle_root,
           },
         },
-      },
-      winopts = {
-        height = 0.9,
-        width = 0.9,
-        preview = {
-          horizontal = "right:70%", -- right|left:size
+        branches = {
+          cwd_prompt = true,
+          cmd_add = { "git", "checkout", "-b" },
+          actions = {
+            ["ctrl-r"] = toggle_root,
+          },
+        },
+        stash = {
+          cwd_prompt = true,
+          actions = {
+            ["ctrl-r"] = toggle_root,
+          },
         },
       },
     },
@@ -180,65 +258,65 @@ return {
       -- find
       {
         "<leader>ff",
-        LazyVim.pick("files", { root = true, resume = true, winopts = { title = "Files(Root)" } }),
+        LazyVim.pick("files", { root = true, resume = true }),
         desc = "Find Files (Root Dir)",
       },
       {
         "<leader>fF",
-        LazyVim.pick("files", { root = true, resume = false, winopts = { title = "Files(Root)" } }),
+        LazyVim.pick("files", { root = true, resume = false }),
         desc = "Find Files",
       },
       {
         "<leader>fr",
-        LazyVim.pick("oldfiles", { root = true, resume = true, winopts = { title = "OldFiles(Root)" } }),
+        LazyVim.pick("oldfiles", { root = true, resume = true }),
         desc = "Recent (Resume)",
       },
       {
         "<leader>fR",
-        LazyVim.pick("oldfiles", { root = true, resume = false, winopts = { title = "OldFiles(Root)" } }),
+        LazyVim.pick("oldfiles", { root = true, resume = false }),
         desc = "Recent",
       },
       -- git
       {
         "<leader>gc",
-        LazyVim.pick("git_commits", { root = true, resume = true, winopts = { title = "Git Commits(Root)" } }),
+        LazyVim.pick("git_commits", { root = true, resume = true }),
         desc = "Commits (Resume)",
       },
       {
         "<leader>gC",
-        LazyVim.pick("git_commits", { root = true, resume = false, winopts = { title = "Git Commits(Root)" } }),
+        LazyVim.pick("git_commits", { root = true, resume = false }),
         desc = "Commits",
       },
       {
         "<leader>gt",
-        LazyVim.pick("git_bcommits", { root = true, resume = true, winopts = { title = "Buffer Commits(Root)" } }),
+        LazyVim.pick("git_bcommits", { root = true, resume = true }),
         desc = "Buffer Commits (Resume)",
       },
       {
         "<leader>gT",
-        LazyVim.pick("git_bcommits", { root = true, resume = false, winopts = { title = "Buffer Commits(Root)" } }),
+        LazyVim.pick("git_bcommits", { root = true, resume = false }),
         desc = "Buffer Commits",
       },
       {
         "<leader>gs",
-        LazyVim.pick("git_status", { root = true, resume = true, winopts = { title = "Git Status(Root)" } }),
+        LazyVim.pick("git_status", { root = true, resume = true }),
         desc = "Status (Resume)",
       },
       {
         "<leader>gS",
-        LazyVim.pick("git_status", { root = true, resume = false, winopts = { title = "Git Status(Root)" } }),
+        LazyVim.pick("git_status", { root = true, resume = false }),
         desc = "Status",
       },
       -- search
       { "<leader>sb", "<cmd>FzfLua grep_curbuf<cr>", desc = "Grep Buffer" },
       {
         "<leader>sg",
-        LazyVim.pick("live_grep", { root = true, resume = true, winopts = { title = "Grep(Root)" } }),
+        LazyVim.pick("live_grep", { root = true, resume = true }),
         desc = "Grep (Resume)",
       },
       {
         "<leader>sG",
-        LazyVim.pick("live_grep", { root = true, resume = false, winopts = { title = "Grep(Root)" } }),
+        LazyVim.pick("live_grep", { root = true, resume = false }),
         desc = "Grep",
       },
       {
@@ -248,12 +326,12 @@ return {
       },
       {
         "<leader>gn",
-        "<cmd>FzfLua git_branches<cr>",
+        LazyVim.pick("git_branches", { root = true, resume = true }),
         desc = "Git Branches",
       },
       {
         "<leader>gm",
-        "<cmd>FzfLua git_stash<cr>",
+        LazyVim.pick("git_stash", { root = true, resume = true }),
         desc = "Git Stashes",
       },
     },
