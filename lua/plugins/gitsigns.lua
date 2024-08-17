@@ -1,12 +1,11 @@
--- TODO: use different colors for different types of changes
 return {
   {
     "lewis6991/gitsigns.nvim",
     opts = {
       numhl = true,
-      linehl = true,
-      word_diff = false,
+      linehl = false,
       current_line_blame = true,
+      attach_to_untracked = true,
     },
   },
 }
