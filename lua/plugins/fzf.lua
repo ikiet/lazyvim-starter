@@ -129,6 +129,9 @@ return {
     "ibhagwan/fzf-lua",
     cmd = "FzfLua",
     opts = {
+      hls = {
+        file_part = "Bold",
+      },
       winopts = default_winopts,
       fzf_opts = {
         ["--no-scrollbar"] = false,
@@ -247,6 +250,8 @@ return {
             ["ctrl-r"] = toggle_root,
           },
         },
+        -- TODO: config icons
+        icons = {},
       },
     },
     keys = {
