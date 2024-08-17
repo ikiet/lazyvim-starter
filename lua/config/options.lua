@@ -4,6 +4,11 @@
 vim.opt.showtabline = 0
 vim.g.autoformat = false
 vim.g.lazyvim_php_lsp = "intelephense"
+-- Options for the LazyVim statuscolumn
+vim.g.lazyvim_statuscolumn = {
+  folds_open = true, -- show fold sign when fold is open
+  folds_githl = true, -- highlight fold sign with git sign color
+}
 
 local utils = require("lazyvim.util").ui
 
@@ -29,11 +34,11 @@ _G.statuscolumn = function()
       if s.name and (s.name:find("GitSign") or s.name:find("MiniDiffSign")) then
         if s.name:find("GitSignsStaged") then
           middle = s
+          if use_githl then
+            githl = s["texthl"]
+          end
         else
           optional_middle = s
-        end
-        if use_githl then
-          githl = s["texthl"]
         end
       else
         left = s
