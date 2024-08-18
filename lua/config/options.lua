@@ -4,6 +4,9 @@
 vim.opt.showtabline = 0
 vim.g.autoformat = false
 vim.g.lazyvim_php_lsp = "intelephense"
+vim.opt.spell = true
+vim.opt.spelllang = { "en", "cjk" }
+vim.opt.spelloptions:append({ 'noplainbuffer', "camel" })
 -- Options for the LazyVim statuscolumn
 vim.g.lazyvim_statuscolumn = {
   folds_open = true, -- show fold sign when fold is open
