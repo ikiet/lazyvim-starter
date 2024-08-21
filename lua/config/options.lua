@@ -4,7 +4,7 @@
 vim.opt.showtabline = 0
 vim.g.autoformat = false
 vim.g.lazyvim_php_lsp = "intelephense"
-vim.opt.spell = true
+vim.opt.spell = false
 vim.opt.spelllang = { "en", "cjk" }
 vim.opt.spelloptions:append({ 'noplainbuffer', "camel" })
 -- Options for the LazyVim statuscolumn

@@ -15,10 +15,10 @@ local function find_file(filename, cwd)
   local root_dir = "/"
 
   repeat
-    local file_paht = current_dir .. "/" .. filename
-    local stat = vim.uv.fs_stat(file_paht)
+    local file_path = current_dir .. "/" .. filename
+    local stat = vim.uv.fs_stat(file_path)
     if stat and stat.type == "file" then
-      return file_paht
+      return file_path
     end
 
     current_dir = vim.uv.fs_realpath(current_dir .. "/..")
@@ -73,9 +73,15 @@ return {
           local vscode_dir = find_vscode_config_dir(cwd)
           if vscode_dir ~= nil then
             local path = find_cspell_config_path(vscode_dir)
+            if path ~= nil then
+              print("Found cspell config at: " .. path)
+            end
             return path
           end
           local path = find_cspell_config_path(cwd)
+          if path ~= nil then
+            print("Found cspell config at: " .. path)
+          end
           return path
         end,
         decode_json = function(json)
