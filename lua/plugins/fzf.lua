@@ -14,6 +14,7 @@ local copy_path = function(selected, opts, absoluteMode)
   if not fullpath then
     return
   end
+  -- FIXME: check uv is available
   local cwd = opts.cwd or opts._cwd or uv.cwd()
   if path.is_absolute(fullpath) and not absoluteMode then
     fullpath = path.relative_to(fullpath, cwd)
@@ -84,12 +85,11 @@ end
 vim.keymap.set("n", "<leader>fd", _G.fzf_dirs)
 
 local default_winopts = {
-  height = 0.9,
+  height = 0.85,
   width = 0.9,
   preview = {
-    layout = "flex", -- horizontal|vertical|flex
-    vertical = "up:55%", -- up|down:size
-    horizontal = "right:60%", -- right|left:size
+    layout = "vertical", -- horizontal|vertical|flex
+    vertical = "up:40%", -- up|down:size
     scrollbar = "border", -- `false` or string:'float|border'
   },
 }
