@@ -1,26 +1,31 @@
 local cmp = require("cmp")
+local closeThenFallback = function(fallback)
+  cmp.close()
+  fallback()
+end
+
 return {
   {
     "nvim-cmp",
     opts = {
       mapping = cmp.mapping.preset.insert({
-        ["<C-b>"] = function(fallback)
+        ["<C-b>"] = closeThenFallback,
+        ["<C-f>"] = closeThenFallback,
+        ["<C-e>"] = closeThenFallback,
+        ["<C-a>"] = closeThenFallback,
+        ["<C-u>"] = function(fallback)
           if cmp.visible() then
             cmp.scroll_docs(-4)
           else
             fallback()
           end
         end,
-        ["<C-f>"] = function(fallback)
+        ["<C-d>"] = function(fallback)
           if cmp.visible() then
             cmp.scroll_docs(4)
           else
             fallback()
           end
-        end,
-        ["<C-e>"] = function(fallback)
-          cmp.close()
-          fallback()
         end,
       }),
       completion = {
