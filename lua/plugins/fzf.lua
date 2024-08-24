@@ -263,7 +263,7 @@ return {
       -- find
       {
         "<leader>ff",
-        LazyVim.pick("files", { root = true, resume = true }),
+        LazyVim.pick("files", { root = false, resume = true }),
         desc = "Find Files (Root Dir)",
       },
       {
@@ -273,7 +273,7 @@ return {
       },
       {
         "<leader>fr",
-        LazyVim.pick("oldfiles", { root = true, resume = true }),
+        LazyVim.pick("oldfiles", { root = false, resume = true }),
         desc = "Recent (Resume)",
       },
       {
@@ -284,7 +284,7 @@ return {
       -- git
       {
         "<leader>gc",
-        LazyVim.pick("git_commits", { root = true, resume = true }),
+        LazyVim.pick("git_commits", { root = false, resume = true }),
         desc = "Commits (Resume)",
       },
       {
@@ -294,7 +294,7 @@ return {
       },
       {
         "<leader>gt",
-        LazyVim.pick("git_bcommits", { root = true, resume = true }),
+        LazyVim.pick("git_bcommits", { root = false, resume = true }),
         desc = "Buffer Commits (Resume)",
       },
       {
@@ -304,7 +304,7 @@ return {
       },
       {
         "<leader>gs",
-        LazyVim.pick("git_status", { root = true, resume = true }),
+        LazyVim.pick("git_status", { root = false, resume = true }),
         desc = "Status (Resume)",
       },
       {
@@ -316,7 +316,7 @@ return {
       { "<leader>sb", "<cmd>FzfLua grep_curbuf<cr>", desc = "Grep Buffer" },
       {
         "<leader>sg",
-        LazyVim.pick("live_grep", { root = true, resume = true }),
+        LazyVim.pick("live_grep", { root = false, resume = true }),
         desc = "Grep (Resume)",
       },
       {
@@ -331,12 +331,12 @@ return {
       },
       {
         "<leader>gn",
-        LazyVim.pick("git_branches", { root = true, resume = true }),
+        LazyVim.pick("git_branches", { root = false, resume = true }),
         desc = "Git Branches",
       },
       {
         "<leader>gm",
-        LazyVim.pick("git_stash", { root = true, resume = true }),
+        LazyVim.pick("git_stash", { root = false, resume = true }),
         desc = "Git Stashes",
       },
     },
