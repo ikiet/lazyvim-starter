@@ -75,14 +75,16 @@ return {
             local path = find_cspell_config_path(vscode_dir)
             if path ~= nil then
               print("Found cspell config at: " .. path)
+              return path
             end
-            return path
+            print("Cannot find cspell config!")
           end
           local path = find_cspell_config_path(cwd)
           if path ~= nil then
             print("Found cspell config at: " .. path)
+            return path
           end
-          return path
+          print("Cannot find cspell config!")
         end,
         decode_json = function(json)
           return vim.json.decode(json)
@@ -99,5 +101,15 @@ return {
         cspell.code_actions.with({ config = config }),
       })
     end,
+  },
+  {
+
+    "williamboman/mason.nvim",
+    opts_extend = { "ensure_installed" },
+    opts = {
+      ensure_installed = {
+        "cspell",
+      },
+    },
   },
 }
