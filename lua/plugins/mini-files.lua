@@ -1,7 +1,6 @@
 return {
   {
     "echasnovski/mini.files",
-    lazy = false,
     opts = {
       windows = {
         preview = true,
@@ -9,7 +8,7 @@ return {
         width_preview = 50,
       },
       options = {
-        use_as_default_explorer = true,
+        use_as_default_explorer = false,
       },
       mappings = {
         go_in_plus = "<CR>",
@@ -18,24 +17,6 @@ return {
         go_out_plus = "<BS>",
         reset = "r",
         synchronize = "<Tab>",
-      },
-    },
-    keys = {
-      { "<leader>fm", false },
-      { "<leader>fM", false },
-      {
-        "<leader>e",
-        function()
-          require("mini.files").open(vim.api.nvim_buf_get_name(0), true)
-        end,
-        desc = "Open mini.files (Directory of Current File)",
-      },
-      {
-        "<leader>E",
-        function()
-          require("mini.files").open(vim.uv.cwd(), true)
-        end,
-        desc = "Open mini.files (cwd)",
       },
     },
     config = function(_, opts)
@@ -115,7 +96,7 @@ return {
 
           vim.keymap.set(
             "n",
-            opts.mappings and opts.mappings.change_cwd or "gc",
+            opts.mappings and opts.mappings.change_cwd or "`",
             files_set_cwd,
             { buffer = buf_id, desc = "Set cwd" }
           )
