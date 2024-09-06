@@ -37,11 +37,11 @@ _G.statuscolumn = function()
       if s.name and (s.name:find("GitSign") or s.name:find("MiniDiffSign")) then
         if s.name:find("GitSignsStaged") then
           middle = s
+        else
+          optional_middle = s
           if use_githl then
             githl = s["texthl"]
           end
-        else
-          optional_middle = s
         end
       else
         left = s
@@ -62,8 +62,8 @@ _G.statuscolumn = function()
     -- Left: mark or non-git sign
     components[1] = utils.icon(utils.get_mark(buf, vim.v.lnum) or left)
     -- Right: fold icon or git sign (only if file)
-    components[2] = is_file and utils.icon(fold or middle) or ""
-    components[3] = is_file and optional_middle and utils.icon(optional_middle) or ""
+    components[2] = is_file and utils.icon(middle) or ""
+    components[3] = is_file and (optional_middle or fold) and utils.icon(fold or optional_middle) or ""
   end
   -- Numbers in Neovim are weird
   -- They show when either number or relativenumber is true
