@@ -4,7 +4,7 @@ return {
     lazy = false,
     opts = {
       windows = {
-        preview = true,
+        preview = false,
         width_focus = 30,
         width_preview = 50,
       },
@@ -125,6 +125,11 @@ return {
           vim.keymap.set("n", "gY", copy_absolute_path, { buffer = buf_id, desc = "Copy Absolute Path To Clipboard" })
 
           vim.keymap.set("n", "gy", copy_relative_path, { buffer = buf_id, desc = "Copy Relative Path To Clipboard" })
+
+          vim.keymap.set("n", "<C-h>", MiniFiles.go_out, { buffer = buf_id, desc = "Go out" })
+          vim.keymap.set("n", "<C-j>", MiniFiles.go_in, { buffer = buf_id, desc = "Go in" })
+          vim.keymap.set("n", "<C-k>", MiniFiles.go_out, { buffer = buf_id, desc = "Go out" })
+          vim.keymap.set("n", "<C-l>", MiniFiles.go_in, { buffer = buf_id, desc = "Go in" })
 
           map_split(buf_id, opts.mappings and opts.mappings.go_in_horizontal or "<C-X>", "horizontal", false)
           map_split(buf_id, opts.mappings and opts.mappings.go_in_vertical or "<C-V>", "vertical", false)
