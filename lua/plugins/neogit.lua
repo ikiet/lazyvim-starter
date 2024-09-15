@@ -1,6 +1,7 @@
 return {
   {
     "NeogitOrg/neogit",
+    lazy = false,
     dependencies = {
       "nvim-lua/plenary.nvim", -- required
       "sindrets/diffview.nvim", -- optional - Diff integration
@@ -21,10 +22,10 @@ return {
         "<leader>ng",
         function()
           local neogit = require("neogit")
-          local root = LazyVim.root()
-          neogit.open({ cwd = root })
+          local cwd = vim.fn.expand("%:p:h")
+          neogit.open({ cwd = cwd })
         end,
-        desc = "Neogit (root)",
+        desc = "Neogit (Current dir)",
       },
       {
         "<leader>nG",
