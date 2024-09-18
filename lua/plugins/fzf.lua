@@ -71,6 +71,19 @@ _G.fzf_dirs = function(opts)
   local fzf_lua = require("fzf-lua")
   opts = opts or {}
   opts.prompt = "Directories> "
+  opts.fzf_opts = {
+    ['--preview'] = {
+      type = "cmd",
+      fn = function(items)
+        return string.format("tree -L 1 %s", items[1])
+      end
+    }
+  }
+
+  opts.winopts = {
+    height = 0.7,
+    width = 0.6,
+  }
   opts.fn_transform = function(x)
     return fzf_lua.utils.ansi_codes.magenta(x)
   end
