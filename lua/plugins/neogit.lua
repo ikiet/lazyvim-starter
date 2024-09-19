@@ -16,6 +16,18 @@ return {
         item = { "󰄾", "󰄼" },
         section = { "", "" },
       },
+      commit_editor = {
+        kind = "floating",
+      },
+      commit_select_view = {
+        kind = "floating",
+      },
+      commit_view = {
+        kind = "floating",
+      },
+      popup = {
+        kind = "floating",
+      },
     },
     keys = {
       {
