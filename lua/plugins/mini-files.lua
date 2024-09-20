@@ -55,6 +55,15 @@ return {
         require("mini.files").refresh({ content = { filter = new_filter } })
       end
 
+      local show_preview = false
+      local toggle_preview = function()
+        show_preview = not show_preview
+        require("mini.files").refresh({ windows = { preview = show_preview } })
+        if show_preview == false then
+          require("mini.files").trim_right()
+        end
+      end
+
       local map_split = function(buf_id, lhs, direction, close_on_file)
         local rhs = function()
           local new_target_window
@@ -112,6 +121,8 @@ return {
             toggle_dotfiles,
             { buffer = buf_id, desc = "Toggle hidden files" }
           )
+
+          vim.keymap.set("n", "gp", toggle_preview, { buffer = buf_id, desc = "Toggle preview" })
 
           vim.keymap.set(
             "n",
