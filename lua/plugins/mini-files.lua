@@ -87,6 +87,39 @@ return {
         vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
       end
 
+      local files_grug_far_replace = function()
+        local cur_entry = MiniFiles.get_fs_entry()
+        -- works only if cursor is on the valid file system entry
+        if cur_entry == nil then
+          return
+        end
+        local path = cur_entry.path
+
+        if cur_entry.fs_type == "file" then
+          path = vim.fs.dirname(path)
+        end
+
+        local prefills = {
+          paths = path,
+        }
+
+        local grug_far = require("grug-far")
+
+        -- instance check
+        if not grug_far.has_instance("Grug Far") then
+          grug_far.open({
+            instanceName = "Grug Far",
+            transient = false,
+            prefills = prefills,
+            staticTitle = "Find and Replace",
+          })
+        else
+          grug_far.open_instance("Grug Far")
+          -- updating the prefills without crealing the search and other fields
+          grug_far.update_instance_prefills("Grug Far", prefills, false)
+        end
+      end
+
       local files_set_cwd = function()
         local cur_entry_path = MiniFiles.get_fs_entry().path
         local cur_directory = vim.fs.dirname(cur_entry_path)
@@ -155,6 +188,8 @@ return {
           vim.keymap.set("n", "gY", copy_absolute_path, { buffer = buf_id, desc = "Copy Absolute Path To Clipboard" })
 
           vim.keymap.set("n", "gy", copy_relative_path, { buffer = buf_id, desc = "Copy Relative Path To Clipboard" })
+
+          vim.keymap.set("n", "gs", files_grug_far_replace, { buffer = buf_id, desc = "Open Grug Far" })
 
           vim.keymap.set(
             "n",
