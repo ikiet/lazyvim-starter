@@ -11,12 +11,6 @@ keymap("i", "<C-b>", "<Left>", opts)
 keymap("i", "<C-e>", "<End>", opts)
 keymap("i", "<C-a>", "<Home>", opts)
 
--- Better window navigation
-keymap("n", "<C-h>", "<C-w>h", opts)
-keymap("n", "<C-j>", "<C-w>j", opts)
-keymap("n", "<C-k>", "<C-w>k", opts)
-keymap("n", "<C-l>", "<C-w>l", opts)
-
 -- keymap({ "n", "i" }, "<C-h>", function()
 --   require("kitty-navigator").navigateLeft()
 -- end, opts)
