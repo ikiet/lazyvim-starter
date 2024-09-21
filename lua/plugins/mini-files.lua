@@ -99,6 +99,11 @@ return {
         require("lazy.util").open(cur_entry_path, { system = true })
       end
 
+      local reveal_in_finder = function()
+        local cur_entry_path = MiniFiles.get_fs_entry().path
+        require("util").reveal_in_finder(cur_entry_path)
+      end
+
       local copy_absolute_path = function()
         local cur_entry_path = MiniFiles.get_fs_entry().path
         vim.fn.setreg("+", cur_entry_path, "c")
@@ -108,6 +113,17 @@ return {
         local cur_entry_path = MiniFiles.get_fs_entry().path
         local relative_path = vim.fn.fnamemodify(cur_entry_path, ":.")
         vim.fn.setreg("+", relative_path, "c")
+      end
+
+      local copy_filename = function()
+        local name = MiniFiles.get_fs_entry().name
+        vim.fn.setreg("+", name, "c")
+      end
+
+      local copy_filename_without_extension = function()
+        local name = MiniFiles.get_fs_entry().name
+        local name_without_extension = vim.fn.fnamemodify(name, ":r")
+        vim.fn.setreg("+", name_without_extension, "c")
       end
 
       vim.api.nvim_create_autocmd("User", {
@@ -133,9 +149,20 @@ return {
 
           vim.keymap.set("n", "go", open_sys_app, { buffer = buf_id, desc = "Open with System Application" })
 
+          vim.keymap.set("n", "gr", reveal_in_finder, { buffer = buf_id, desc = "Reveal in Finder" })
+
           vim.keymap.set("n", "gY", copy_absolute_path, { buffer = buf_id, desc = "Copy Absolute Path To Clipboard" })
 
           vim.keymap.set("n", "gy", copy_relative_path, { buffer = buf_id, desc = "Copy Relative Path To Clipboard" })
+
+          vim.keymap.set(
+            "n",
+            "gN",
+            copy_filename_without_extension,
+            { buffer = buf_id, desc = "Copy Filename Without Extension To Clipboard" }
+          )
+
+          vim.keymap.set("n", "gn", copy_filename, { buffer = buf_id, desc = "Copy Filename To Clipboard" })
 
           vim.keymap.set("n", "<C-h>", MiniFiles.go_out, { buffer = buf_id, desc = "Go out" })
           vim.keymap.set("n", "<C-j>", MiniFiles.go_in, { buffer = buf_id, desc = "Go in" })
