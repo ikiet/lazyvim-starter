@@ -95,10 +95,6 @@ return {
         end
         local path = cur_entry.path
 
-        if cur_entry.fs_type == "file" then
-          path = vim.fs.dirname(path)
-        end
-
         local prefills = {
           paths = path,
         }
