@@ -6,6 +6,7 @@ return {
       windows = {
         preview = false,
         width_focus = 30,
+        width_nofocus = 25,
         width_preview = 50,
       },
       options = {
@@ -13,8 +14,8 @@ return {
       },
       mappings = {
         go_in_plus = "<CR>",
-        go_in = "L",
-        go_out = "H",
+        go_in = "<C-l>",
+        go_out = "<C-h>",
         go_out_plus = "<BS>",
         reset = "r",
         synchronize = "<Tab>",
@@ -163,11 +164,6 @@ return {
           )
 
           vim.keymap.set("n", "gn", copy_filename, { buffer = buf_id, desc = "Copy Filename To Clipboard" })
-
-          vim.keymap.set("n", "<C-h>", MiniFiles.go_out, { buffer = buf_id, desc = "Go out" })
-          vim.keymap.set("n", "<C-j>", MiniFiles.go_in, { buffer = buf_id, desc = "Go in" })
-          vim.keymap.set("n", "<C-k>", MiniFiles.go_out, { buffer = buf_id, desc = "Go out" })
-          vim.keymap.set("n", "<C-l>", MiniFiles.go_in, { buffer = buf_id, desc = "Go in" })
 
           map_split(buf_id, opts.mappings and opts.mappings.go_in_horizontal or "<C-X>", "horizontal", false)
           map_split(buf_id, opts.mappings and opts.mappings.go_in_vertical or "<C-V>", "vertical", false)
