@@ -9,8 +9,7 @@ local open_popup = function()
   end
   local neogit = require("neogit")
   -- TODO: currently unable to pass cwd to the popup
-  -- neogit.open({ "commit", cwd = git_path })
-  neogit.open({ cwd = git_path, kind = "floating" })
+  neogit.open({ "commit", cwd = git_path, kind = "floating" })
 end
 return {
   {
