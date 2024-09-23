@@ -23,6 +23,20 @@ return {
         end,
         desc = "Open Diffview",
       },
+      {
+        "<leader>gT",
+        function()
+          vim.cmd("DiffviewFileHistory")
+        end,
+        desc = "Open DiffviewFileHistory",
+      },
+      {
+        "<leader>gt",
+        function()
+          vim.cmd("DiffviewFileHistory %")
+        end,
+        desc = "Open DiffviewFileHistory (Current File)",
+      },
     },
     opts = {
       enhanced_diff_hl = true, -- See |diffview-config-enhanced_diff_hl|
