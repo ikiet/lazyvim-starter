@@ -326,12 +326,12 @@ return {
         desc = "Buffer Commits",
       },
       {
-        "<leader>gs",
+        "<leader>Gs",
         LazyVim.pick("git_status", { root = false, resume = true }),
         desc = "Status (Resume)",
       },
       {
-        "<leader>gS",
+        "<leader>GS",
         LazyVim.pick("git_status", { root = true, resume = false }),
         desc = "Status",
       },
