@@ -72,12 +72,12 @@ _G.fzf_dirs = function(opts)
   opts = opts or {}
   opts.prompt = "Directories> "
   opts.fzf_opts = {
-    ['--preview'] = {
+    ["--preview"] = {
       type = "cmd",
       fn = function(items)
         return string.format("tree -L 1 %s", items[1])
-      end
-    }
+      end,
+    },
   }
 
   opts.winopts = {
@@ -272,7 +272,17 @@ return {
       { "<leader><space>", false },
       { "<leader>,", false },
       { "<leader>/", false },
-
+      {
+        "<C-x><C-f>",
+        mode = { "i" },
+        function()
+          require("fzf-lua").complete_file({
+            cmd = "rg --files",
+            winopts = { preview = { hidden = "nohidden" } },
+          })
+        end,
+        desc = "Fuzzy complete file",
+      },
       -- find
       {
         "<leader>ff",

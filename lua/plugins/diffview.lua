@@ -1,3 +1,17 @@
+local open_popup = function()
+  local view = require("diffview.lib").get_current_view()
+  if view == nil then
+    return
+  end
+  local git_path = view.adapter.ctx.toplevel
+  if git_path == nil then
+    return
+  end
+  local neogit = require("neogit")
+  -- TODO: currently unable to pass cwd to the popup
+  -- neogit.open({ "commit", cwd = git_path })
+  neogit.open({ cwd = git_path, kind = "floating" })
+end
 return {
   {
     "sindrets/diffview.nvim",
@@ -21,25 +35,20 @@ return {
         },
       },
       keymaps = {
-        view = {},
+        view = {
+          {
+            "n",
+            "<leader>cc",
+            open_popup,
+            { desc = "Commit staged changes (Current dir)" },
+          },
+        },
         file_panel = {
           {
             "n",
-            "cc",
-            "<Cmd>Neogit commit<CR>",
-            { desc = "Commit staged changes" },
-          },
-          {
-            "n",
-            "ca",
-            "<Cmd>Git commit --amend <bar> wincmd J<CR>",
-            { desc = "Amend the last commit" },
-          },
-          {
-            "n",
-            "c<space>",
-            ":Git commit ",
-            { desc = 'Populate command line with ":Git commit "' },
+            "<leader>cc",
+            open_popup,
+            { desc = "Commit staged changes (Current dir)" },
           },
         },
       },
