@@ -12,7 +12,7 @@ keymap("i", "<C-e>", "<End>", opts)
 keymap("i", "<C-a>", "<Home>", opts)
 
 keymap("n", "<leader>gg", function()
-  LazyVim.lazygit({ cwd = LazyVim.root.git(), size = { width = 0.98, height = 0.98 } })
+  LazyVim.lazygit({ cwd = LazyVim.root.git(), size = { width = 1, height = 1 } })
 end, { desc = "Lazygit (Root Dir)" })
 keymap("n", "<leader>gG", function()
   LazyVim.lazygit({ size = { width = 0.98, height = 0.98 } })
