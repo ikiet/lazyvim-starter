@@ -269,6 +269,7 @@ return {
     },
     keys = {
       { "<leader>sc", false },
+      { "<leader>gs", false },
       { "<leader><space>", false },
       { "<leader>,", false },
       { "<leader>/", false },
@@ -314,26 +315,6 @@ return {
         "<leader>gC",
         LazyVim.pick("git_commits", { root = true, resume = false }),
         desc = "Commits",
-      },
-      {
-        "<leader>Gt",
-        LazyVim.pick("git_bcommits", { root = false, resume = true }),
-        desc = "Buffer Commits (Resume)",
-      },
-      {
-        "<leader>GT",
-        LazyVim.pick("git_bcommits", { root = true, resume = false }),
-        desc = "Buffer Commits",
-      },
-      {
-        "<leader>Gs",
-        LazyVim.pick("git_status", { root = false, resume = true }),
-        desc = "Status (Resume)",
-      },
-      {
-        "<leader>GS",
-        LazyVim.pick("git_status", { root = true, resume = false }),
-        desc = "Status",
       },
       -- search
       { "<leader>sb", "<cmd>FzfLua grep_curbuf<cr>", desc = "Grep Buffer" },
