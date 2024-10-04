@@ -7,6 +7,7 @@ vim.g.lazyvim_php_lsp = "intelephense"
 vim.opt.spell = false
 vim.opt.spelllang = { "en", "cjk" }
 vim.opt.spelloptions:append({ 'noplainbuffer', "camel" })
+vim.opt.scrolloff = 10 -- Lines of context
 -- Options for the LazyVim statuscolumn
 vim.g.lazyvim_statuscolumn = {
   folds_open = true, -- show fold sign when fold is open

@@ -44,6 +44,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.editor.fzf" },
     { import = "lazyvim.plugins.extras.lang.rust" },
     { import = "lazyvim.plugins.extras.dap.nlua" },
+    { import = "lazyvim.plugins.extras.coding.neogen" },
     { import = "plugins" },
   },
   defaults = {
