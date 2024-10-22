@@ -23,6 +23,7 @@ require("lazy").setup({
     -- { import = "lazyvim.plugins.extras.coding.copilot-chat" },
     -- { import = "lazyvim.plugins.extras.lsp.none-ls" },
     { import = "lazyvim.plugins.extras.ui.alpha" },
+    { import = "lazyvim.plugins.extras.lang.java" },
     { import = "lazyvim.plugins.extras.editor.inc-rename" },
     { import = "lazyvim.plugins.extras.lang.clangd" },
     { import = "lazyvim.plugins.extras.formatting.prettier" },
