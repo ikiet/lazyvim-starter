@@ -21,5 +21,8 @@ return {
         desc = "Search and Replace",
       },
     },
+    opts = {
+      maxSearchMatches = 10000,
+    },
   },
 }
