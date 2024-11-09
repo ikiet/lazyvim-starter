@@ -31,6 +31,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.dap.core" },
     { import = "lazyvim.plugins.extras.ui.treesitter-context" },
     { import = "lazyvim.plugins.extras.lang.typescript" },
+    { import = "lazyvim.plugins.extras.vscode" },
     { import = "lazyvim.plugins.extras.lang.php" },
     { import = "lazyvim.plugins.extras.lang.markdown" },
     { import = "lazyvim.plugins.extras.lang.docker" },
