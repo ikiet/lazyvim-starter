@@ -1,3 +1,4 @@
+if true then return {} end
 return {
   {
     "https://git.sr.ht/~swaits/zellij-nav.nvim",
